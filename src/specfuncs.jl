@@ -1,9 +1,3 @@
-""
-    directindex(direction)
-Convert a String `direction` into its relative
-index change.
-Return: CartesianIndex
-"""
 function directindex(direction) 
     dirdict = Dict(
         "UP" => (-1, 0), "DOWN" => (1, 0),
