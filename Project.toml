@@ -1,7 +1,7 @@
 name = "4202HW1"
 uuid = "0edb0d52-f4b3-4ee2-b48e-a3f96d5976ca"
 authors = ["bk <brice@allenic.co> and contributors"]
-version = "0.1.0"
+version = "0.1.2"
 
 [deps]
 JSON = "682c06a0-de6a-54ab-a142-c8b1cf79cde6"
