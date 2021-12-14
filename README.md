@@ -1,5 +1,5 @@
 # Program 1 - State Space Search  
-
+Brice Allen
 Intro to AI CSCI-4202 CU Denver.
 
 ## Installation
@@ -31,21 +31,15 @@ julia> buildapuzzle("../json/10-moves.json") ## Change puzzle name as desired
 ##          Start: Any[3 6 0; 7 4 8; 1 2 5]
 ##          Goal: Any[0 3 6; 1 4 7; 2 5 8]
 ##          n: 3
-julia> astar(goal,manhattan, start) ## run program
-## availible functions are: 
-##           function astar(goal, heuristic, start)
-##                 - Heuristic = misplaced or manhattan
-##           idfs(goal, start; initdepth=1, limit=100, step=1)
-##                  - only start and goal are required
-
-
+julia> astar(goal, manhattan, start) ## run astar seach with manhattan heuristic
+julia> astar(goal, misplaced, start) ## run astar seach with misplaced heuristic
+julia> idfs(goal, start; initdepth=1, limit=100, step=1) ## depth first search
+## - only start and goal are required
+julia> bfs(goal, start) ## breadth first search
+##           
 
 ```
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
-Please make sure to update tests as appropriate.
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)

@@ -31,7 +31,7 @@ function iscycle(node, cynum)
 
     while (count < cynum) && !isnothing(previous.parent)
         count += 1
-        previous = previous.parent
+        previous = previous.rparent
 
         if node.state == previous.state
             return true
