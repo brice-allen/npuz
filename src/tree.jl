@@ -11,7 +11,7 @@ function ==(x::TreeNode, y::TreeNode)
     x.state == y.state
 end
 
-function newnode(action, parent, state)
+function addnode(action, parent, state)
     cost = parent.pathcost + 1
     newnode = TreeNode(action, parent, cost, state)
     return newnode
@@ -25,7 +25,7 @@ end
 
 
 
-function cyclechecker(node, cynum)
+function iscycle(node, cynum)
     count = 0
     previous = node
 
@@ -33,7 +33,7 @@ function cyclechecker(node, cynum)
         count += 1
         previous = previous.parent
 
-        if node.state == prnt.state
+        if node.state == previous.state
             return true
         end
     end

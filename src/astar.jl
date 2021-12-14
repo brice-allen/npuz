@@ -57,7 +57,7 @@ function astar(goal, heuristic, start)
             if in(explored, s)
                 continue
             end
-            @timeit to "Node Creation" cnode = newnode(a, node, s)
+            @timeit to "Node Creation" cnode = addnode(a, node, s)
             @timeit to "Heuristic Score" score =
                 node.pathcost + heuristic(goal, cnode.state)
             if s == goal

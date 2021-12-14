@@ -11,11 +11,11 @@ function dls(depth, goal, start)
         if node.pathcost > depth
             continue;
         
-        elseif !cyclechecker(node, 3)
+        elseif !iscycle(node, 3)
             @timeit to "Moves" acts = moves(node.state);
             @timeit to "Expand" res = expansion(node.state);
-            for (x, y) in zip(acts, res)
-                @timeit to "Node Creattion" newnode = newnode(x, node, y);
+            for (action, parent) in zip(acts, res)
+                @timeit to "Node Creation" newnode = addnode(action, node, parent);
                 @timeit to "Push" push!(frontier, newnode);
             end
         end
@@ -30,7 +30,6 @@ function idfs(goal, start; initdepth=1, limit=100, step=1)
     searchrange = initdepth:step:limit;
     for d in searchrange
             @timeit to "DLS" solnode = dls(d, goal, start)
-
         if !isnothing(solnode)
             displaysolution(solnode)
             return solnode
@@ -40,3 +39,4 @@ function idfs(goal, start; initdepth=1, limit=100, step=1)
     println("We have gone too deep, no solutions found!  (limit=$limit)")
     return nothing    
 end
+

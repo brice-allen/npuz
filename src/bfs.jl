@@ -15,13 +15,13 @@ function bfs(goal, start)
 
         for (currentstate, currentaction) in zip(states, acts)
             if currentstate == goal
-                sovle = newnode(currentaction, node, currentstate)
+                sovle = addnode(currentaction, node, currentstate)
                 displaysolution(sovle)
                 return sovle
             end
             if !in(currentstate, reached)
 
-                @timeit to "Node Creation" currentnode = newnode(currentaction, node, currentstate)
+                @timeit to "Node Creation" currentnode = addnode(currentaction, node, currentstate)
                 @timeit to "Push" push!(frontier, currentnode)
             end
         end

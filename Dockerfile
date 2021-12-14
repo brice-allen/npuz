@@ -13,7 +13,7 @@ RUN apt-get install -y bzip2 wget gnupg dirmngr apt-transport-https \
 
 #setup ssh
 RUN mkdir /var/run/sshd && \
-    echo 'root:bflat0' |chpasswd && \
+    echo 'root:PermitRootLogin' |chpasswd && \
     sed -ri 's/^#?PermitRootLogin\s+.*/PermitRootLogin yes/' \
     /etc/ssh/sshd_config && \
     sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config && \
