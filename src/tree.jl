@@ -41,11 +41,6 @@ function cyclechecker(node, cynum)
 end
 
 
-"""
-    printsolve(solvenode)
-Formatted print of a TreeNode and all parents
-to the origin.
-"""
 function displaysolution(solvenode)
     while !isnothing(solvenode)
         println("Step $(solvenode.pathcost):")
