@@ -1,45 +1,28 @@
-function cartesianmove(direction) 
-    dirdict = Dict(
-        "UP" => (-1, 0), "DOWN" => (1, 0),
-        "LEFT" => (0, -1), "RIGHT" => (0, 1)
-    );
+function cartesianmoveindex(direction)
+    directiondict = Dict("UP" => (-1, 0), "DOWN" => (1, 0), "LEFT" => (0, -1), "RIGHT" => (0, 1))
 
-    return CartesianIndex(dirdict[direction])
+    return CartesianIndex(directiondict[direction])
 end
 
 
-"""
- exchange tile1 and tile2 inplace
- the '!' identifies a function that 
-    modifies its argument in julia
-"""
-function tileexchange!(board, tile1, tile2)
-    tmp = board[tile1];
-    board[tile1] = board[tile2];
-    board[tile2] = tmp;
+function swaptiles!(board, x, y)
+    temp = board[x]
+    board[x] = board[y]
+    board[y] = temp
 end
 
 
-"""
-    build an array of allowed directions
-Return: Array of viable directional moves
-"""
-function allmoves(board)
-    indexzero = findfirst(iszero, board);
-    # Dict to change perspective of action
-    # to the tile being moved.
-    movedict = Dict(
-        "UP" => "DOWN", "DOWN" => "UP",
-        "LEFT" => "RIGHT", "RIGHT" => "LEFT"
-    );
+function moves(board)
+    first = findfirst(iszero, board)
+    movedict = Dict("UP" => "DOWN", "DOWN" => "UP", "LEFT" => "RIGHT", "RIGHT" => "LEFT")
 
-    directions = [];
+    directions = []
     for i in ("UP", "DOWN", "LEFT", "RIGHT")
-        index = indexzero + cartesianmove(i)
+        index = first + cartesianmoveindex(i)
 
         if checkbounds(Bool, board, index)
             action = (index, movedict[i])
-            push!(directions, action);
+            push!(directions, action)
         end
     end
 
@@ -47,39 +30,22 @@ function allmoves(board)
 end
 
 
-"""
-    result(action, board)
-Apply `action` to copy of `board` by swapping
-tiles. 
-Return: Copy of modified board.
-"""
-function nextboard(action, board)
-    """Applies an action to the board.
-    The action should be a tuple in the form
-    (index, direction) where index is the index 
-    of the piece to be moved, and direction is 
-    one of "UP", "DOWN", "LEFT", "RIGHT"
-    """
-    newboard = copy(board);
-    index1 = action[1];
-    index2 = index1 + cartesianmove(action[2]);
-    tileexchange!(newboard, index1, index2)
+function copyboard(action, board)
+    newboard = copy(board)
+    index1 = action[1]
+    index2 = index1 + cartesianmoveindex(action[2])
+    swaptiles!(newboard, index1, index2)
 
     return newboard
 end
 
-
-"""
-    expand(board)
-Calculate all possible next-move states.
-Return: Array of puzzle states.
-"""
-function expand(board)
-    states = [];
-    possacts = allmoves(board);
+## determine all options for move states
+function expansion(board)
+    states = []
+    possacts = moves(board)
 
     for act in possacts
-        push!(states, nextboard(act, board));
+        push!(states, copyboard(act, board))
     end
 
     return states

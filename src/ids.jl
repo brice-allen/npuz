@@ -1,13 +1,6 @@
-"""
-    depthlimitedsearch(depth, goal, puzzle)
-    Perform a depth-limited search of a tree structure initiated 
-    with `puzzle`. Search proceeds until either the `goal` 
-    state is found, or no solution is possible.
-    
-    Return: TreeNode containing the goal state or nothing.
-"""
-function dls(depth, goal, puzzle)
-    frontier = [newtree(puzzle)];
+# depth limited
+function dls(depth, goal, start)
+    frontier = [createtree(start)];
 
     while !isempty(frontier)
         @timeit to "pop" node = pop!(frontier);
@@ -15,17 +8,14 @@ function dls(depth, goal, puzzle)
         if node.state == goal
             return node
         end
-
-        # Use pathcost as depth
         if node.pathcost > depth
             continue;
         
-        elseif !iscycle(node, 3)
-            @timeit to "Number of Moves" acts = allmoves(node.state);
-            @timeit to "Expand" res = expand(node.state);
-
-            for (a, r) in zip(acts, res)
-                @timeit to "Nodes Created" newnode = addnode(a, node, r);
+        elseif !cyclechecker(node, 3)
+            @timeit to "Moves" acts = moves(node.state);
+            @timeit to "Expand" res = expansion(node.state);
+            for (x, y) in zip(acts, res)
+                @timeit to "Node Creattion" newnode = newnode(x, node, y);
                 @timeit to "Push" push!(frontier, newnode);
             end
         end
@@ -34,27 +24,19 @@ function dls(depth, goal, puzzle)
     return nothing
 end
 
-
-"""
-    iterativedfs(goal, puzzle; initdepth=1, limit=100, step=1)
-    Perform a depth-limited search of a tree structure initiated 
-    with `puzzle`. Search proceeds until either the `goal` 
-    state is found, or no solution is possible.
-    
-    Return: TreeNode containing the goal state or nothing.
-"""
-function idfs(goal, puzzle; initdepth=1, limit=100, step=1)
+# iterative
+function idfs(goal, start; initdepth=1, limit=100, step=1)
     reset_timer!(to::TimerOutput)
     searchrange = initdepth:step:limit;
     for d in searchrange
-            @timeit to "Depth Limited Search" solnode = dls(d, goal, puzzle)
+            @timeit to "DLS" solnode = dls(d, goal, start)
 
         if !isnothing(solnode)
-            printsolve(solnode)
+            displaysolution(solnode)
             return solnode
         end
     end
     
-    println("No solutions found within depth limit. (limit=$limit)")
+    println("We have gone too deep, no solutions found!  (limit=$limit)")
     return nothing    
 end

@@ -1,45 +1,32 @@
-"""
-    bfs(goal, puzzle)
-    Perform a breadth-first search of a tree structure initiated 
-    with `puzzle`. Search proceeds  until either the `goal` 
-    state is found, or no solution is possible.
-    
-    Return: TreeNode containing the goal state or nothing.
-"""
-function bfs(goal, puzzle)
-    # Reset timer
+
+#  breadth first search   
+function bfs(goal, start)
     reset_timer!(to::TimerOutput)
-
-    node = newtree(puzzle);
-
+    node = createtree(start)
     if node.state == goal
         return node
     end
-
-    frontier = [node];
-    reached = [node.state];
-
+    frontier = [node]
+    reached = [node.state]
     while !isempty(frontier)
-        @timeit to "Number of Moves" acts = allmoves(node.state);
-        @timeit to "Pop" node = popfirst!(frontier);
-        @timeit to "Expand" states = expand(node.state);
+        @timeit to "Moves" acts = moves(node.state)
+        @timeit to "Pop" node = popfirst!(frontier)
+        @timeit to "Expand" states = expansion(node.state)
 
-
-        for (cstate, caction) in zip(states, acts)
-            if cstate == goal
-                solvnode = addnode(caction, node, cstate);
-                printsolve(solvnode)
-                return solvnode
+        for (currentstate, currentaction) in zip(states, acts)
+            if currentstate == goal
+                sovle = newnode(currentaction, node, currentstate)
+                displaysolution(sovle)
+                return sovle
             end
+            if !in(currentstate, reached)
 
-            if !in(cstate, reached)
-                @timeit to "Push" push!(reached, cstate);
-                @timeit to "Nodes Created" cnode = addnode(caction, node, cstate);
-                @timeit to "Push" push!(frontier, cnode)
+                @timeit to "Node Creation" currentnode = newnode(currentaction, node, currentstate)
+                @timeit to "Push" push!(frontier, currentnode)
             end
         end
     end
 
-    println("No solutions found.")
+    println("No solutions found!"^10)
     return nothing
 end
